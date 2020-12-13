@@ -7,6 +7,7 @@ from sklearn.cluster import KMeans
 from scipy.cluster.hierarchy import dendrogram
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.cluster import DBSCAN
+from sklearn.preprocessing import StandardScaler
 
 
 print("")
@@ -42,11 +43,44 @@ plt.show()
 
 #---------------------------------------------------------------------------------------------------------------
 ####DBSCAN
-clustering = DBSCAN(eps=3, min_samples=2).fit(dataproy)
-clustering.labels_
+print("DBSCAN...")
+def dbscan(X, eps, min_samples):
+    ss = StandardScaler()
+    X = ss.fit_transform(X)
+    db = DBSCAN(eps=eps, min_samples=min_samples)
+    db.fit(X)
+    y_pred = db.fit_predict(X)
+    plt.scatter(X[:,2], X[:,9],c=y_pred, cmap='rainbow')
+    plt.xlabel("house area")
+    plt.ylabel("amount paid")
+    plt.title("DBSCAN")
+dbscan(dataproy, eps = .5, min_samples = 5)
+
+
+# modelDensity = DBSCAN(eps=3, min_samples=2)
+# modelDensity.fit(dataproy)
+# modelDensity.labels_
+# plt.scatter(is_urban,amount_paid, c=modelDensity.labels_, cmap='rainbow')  
+# # plot the centroid coordinates of each cluster
+# plt.scatter(modelKmeans.cluster_centers_[:,8], modelKmeans.cluster_centers_[:,9], color='black')
+# plt.xlabel("is urban")
+# plt.ylabel("amount paid")
+# plt.show()
 
 #---------------------------------------------------------------------------------------------------------------
 ####JERARQUICO
+print("HIERARCHICAL...")
+def hier(X, n_clusters):
+    ss = StandardScaler()
+    X = ss.fit_transform(X)
+    hier = AgglomerativeClustering(n_clusters=n_clusters)
+    y_pred = hier.fit_predict(X)
+    plt.scatter(X[:,2], X[:,9],c=y_pred, cmap='rainbow')
+    plt.xlabel("house area")
+    plt.ylabel("amount paid")
+    plt.title("Hierarchical")
+hier(dataproy, n_clusters =2 )    
+    
 #def plot_dendrogram(model, **kwargs)
 
 # # setting distance_threshold=0 ensures we compute the full tree.
@@ -60,6 +94,19 @@ clustering.labels_
 # plt.show()
 #---------------------------------------------------------------------------------------------------------------
 ####KMEANS
+print("KMEANS...")
+def kmeans(X, n_clusters):
+    ss = StandardScaler()
+    X = ss.fit_transform(X)
+    km = KMeans(n_clusters=n_clusters)
+    km.fit(X)
+    y_pred = km.predict(X)
+    plt.scatter(X[:,8], X[:,9],c=y_pred, cmap='rainbow')
+    plt.xlabel("house area")
+    plt.ylabel("amount paid")
+    plt.title("K-means")
+kmeans(dataproy, n_clusters = 2)
+
 
 # modelKmeans = KMeans(n_clusters=2, init = 'k-means++')
 # modelKmeans.fit(dataproy)

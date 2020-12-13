@@ -1,7 +1,6 @@
 import numpy as np # linear algebra
 import pandas as pd # data processing
 
-#Atribute selection:
 
 #sklearn variaos:
 from sklearn.model_selection import cross_val_score
@@ -68,11 +67,11 @@ print(dataproy.info())
 
 #---------------------------------------------------------------------------------------------------------------
 
-####RANGOS
+###RANGOS        #activamos cuando usamos clasificadores normales
 # Binning numerical columns  //dividimos en 10 grupos dependiendo del amouint paid
-#                            // creamos una nueva columna con estos grupos
+#                             // creamos una nueva columna con estos grupos
 # Using Pandas               //reparte en 10 grupes del mismo tamaño
-#dataproy['Cat_amount_paid'] = pd.qcut(dataproy['amount_paid'], q=10, labels=False )
+dataproy['Cat_amount_paid'] = pd.qcut(dataproy['amount_paid'], q=10, labels=False )
 
 
 # # Using sklearn.preprocessing.KBinsDiscretizer   // es lo mismo que el qcut  // no lo usamos
@@ -83,52 +82,52 @@ print(dataproy.info())
 
 #---------------------------------------------------------------------------------------------------------------
 
-####ATRIBUTE SELECTION   (Brute Force)
+####ATRIBUTE SELECTION
 
 #Quitamos la columna del amount_paid
-#dataproy2 = dataproy.drop(['amount_paid', 'Cat_amount_paid'],axis=1)
-dataproy2 = dataproy.drop(['amount_paid'],axis=1)
+dataproy2 = dataproy.drop(['amount_paid', 'Cat_amount_paid'],axis=1)  #cambir cuandomusamosm clasificadores normales
+#dataproy2 = dataproy.drop(['amount_paid'],axis=1)                    #cambiar cuando usamos regression
 print(dataproy2.info())
 
 # Split in train and test datasets
 # 2D Attributes
 X = dataproy2
-#y = dataproy['Cat_amount_paid']
-y = dataproy['amount_paid']
+y = dataproy['Cat_amount_paid']       #cambir cuando usamos clasificadores normales
+#y = dataproy['amount_paid']          #cambiar cuando usamos regression
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=6)
 
 #---------------------------------------------------------------------------------------------------------------
 #### KNN REGRESION   (para rangos)
-print('KNeighborsRegression...')
-for i, weights in enumerate(['uniform', 'distance']):
-    knn_model = neighbors.KNeighborsRegressor(10, weights=weights)
-    knn_model.fit(X_train, y_train)
-    # test prediction
-    y_pred = knn_model.predict(X_test)
-    scores_regr = mean_absolute_error(y_test, y_pred)
-    print(scores_regr)  #dividir esto por el maximo o la media
+# print('KNeighborsRegression...')
+# for i, weights in enumerate(['uniform', 'distance']):
+#     knn_model = neighbors.KNeighborsRegressor(10, weights=weights)
+#     knn_model.fit(X_train, y_train)
+#     # test prediction
+#     y_pred = knn_model.predict(X_test)
+#     scores_regr = mean_absolute_error(y_test, y_pred)
+#     print(scores_regr)  #dividir esto por el maximo o la media
 
-#---------------------------------------------------------------------------------------------------------------
-#### Decision Tree Regression with AdaBoost REGRESION   (para rangos)
+# #---------------------------------------------------------------------------------------------------------------
+# #### Decision Tree Regression with AdaBoost REGRESION   (para rangos)
 
-Treeregr_1 = DecisionTreeRegressor(criterion='mse', max_depth=10, splitter='random')
+# Treeregr_1 = DecisionTreeRegressor(criterion='mse', max_depth=10, splitter='random')
 
-Adaregr_2 = AdaBoostRegressor(DecisionTreeRegressor(max_depth=10),
-                          n_estimators=500)
+# Adaregr_2 = AdaBoostRegressor(DecisionTreeRegressor(max_depth=10),
+#                           n_estimators=500)
 
-Treeregr_1.fit(X_train, y_train)
-Adaregr_2.fit(X_train, y_train)
+# Treeregr_1.fit(X_train, y_train)
+# Adaregr_2.fit(X_train, y_train)
 
-# Predict
-y_pred1 = Treeregr_1.predict(X_test)
-y_pred2 = Adaregr_2.predict(X_test)
-scores_regrTree = mean_absolute_error(y_test, y_pred1)
-scores_regrAda = mean_absolute_error(y_test, y_pred2)
+# # Predict
+# y_pred1 = Treeregr_1.predict(X_test)
+# y_pred2 = Adaregr_2.predict(X_test)
+# scores_regrTree = mean_absolute_error(y_test, y_pred1)
+# scores_regrAda = mean_absolute_error(y_test, y_pred2)
 
-print('DecisionTreeRegressor...')
-print(scores_regrTree)  #dividir esto por el maximo o la media
-print('AdaBoostRegressor...')
-print(scores_regrAda)  #dividir esto por el maximo o la media
+# print('DecisionTreeRegressor...')
+# print(scores_regrTree)  #dividir esto por el maximo o la media
+# print('AdaBoostRegressor...')
+# print(scores_regrAda)  #dividir esto por el maximo o la media
 
 
 #---------------------------------------------------------------------------------------------------------------
