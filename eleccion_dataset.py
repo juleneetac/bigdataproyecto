@@ -66,20 +66,11 @@ print(dataproy.info())
 
 
 #---------------------------------------------------------------------------------------------------------------
-
-###RANGOS        #activamos cuando usamos clasificadores normales
+####RANGOS
 # Binning numerical columns  //dividimos en 10 grupos dependiendo del amouint paid
-#                             // creamos una nueva columna con estos grupos
+#                            // creamos una nueva columna con estos grupos
 # Using Pandas               //reparte en 10 grupes del mismo tamaño
 dataproy['Cat_amount_paid'] = pd.qcut(dataproy['amount_paid'], q=10, labels=False )
-
-
-# # Using sklearn.preprocessing.KBinsDiscretizer   // es lo mismo que el qcut  // no lo usamos
-#                                           // 10 grupos con la misma distancia, esta no nos interesa tanto
-# # https://scikit-learn.org/dev/auto_examples/preprocessing/plot_discretization_strategies.html
-# kbd = KBinsDiscretizer(n_bins=10, encode='ordinal', strategy='uniform')
-# dataproybin = kbd.fit_transform(dataproy)
-
 #---------------------------------------------------------------------------------------------------------------
 
 ####ATRIBUTE SELECTION
@@ -129,19 +120,6 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 # print('AdaBoostRegressor...')
 # print(scores_regrAda)  #dividir esto por el maximo o la media
 
-
-#---------------------------------------------------------------------------------------------------------------
-
-####KNN
-# model train metric='euclidean', n_neighbors=1
-# print('KNeighborsClassifier...')
-# knn_model = KNeighborsClassifier(metric='minkowski', n_neighbors=10)
-# knn_model.fit(X_train, y_train)
-
-# # test prediction
-# y_pred = knn_model.predict(X_test)
-# print('Accuracy: %.2f%%' % (100.0 * knn_model.score(X_test, y_test)))
-# print('Sin nada: ', classification_report(y_test, y_pred)[-162:])
 
 #---------------------------------------------------------------------------------------------------------------
 
@@ -225,7 +203,7 @@ print('Sin nada optimizado: ', classification_report(y_test, y_pred)[-162:])  #c
 # print('AdaBoostClassifier: ', classification_report(y_test, y_test_pred)[-162:])
 
 #----------------------------------------------------------------------------------------------------------
-# #BUSQUEDA DE DE LOS VALOREWS OPTIMOS
+# #BUSQUEDA DE DE LOS VALOREWS OPTIMOS deldecision tree
 # print('Buscando valores optimos...')
 # tree = DecisionTreeClassifier()
 
@@ -245,6 +223,19 @@ print('Sin nada optimizado: ', classification_report(y_test, y_pred)[-162:])  #c
 
 #---------------------------------------------------------------------------------------------------------------
 
+####KNN
+# model train metric='euclidean', n_neighbors=1
+# print('KNeighborsClassifier...')
+# knn_model = KNeighborsClassifier(metric='minkowski', n_neighbors=10)
+# knn_model.fit(X_train, y_train)
+
+# # test prediction
+# y_pred = knn_model.predict(X_test)
+# print('Accuracy: %.2f%%' % (100.0 * knn_model.score(X_test, y_test)))
+# print('Sin nada: ', classification_report(y_test, y_pred)[-162:])
+
+#---------------------------------------------------------------------------------------------------------------
+
 # ####SVC
 # print('SVC...')
 # svm_model = SVC(kernel='linear')
@@ -254,8 +245,14 @@ print('Sin nada optimizado: ', classification_report(y_test, y_pred)[-162:])  #c
 # # test prediction
 # y_pred = svm_model.predict(X_test)
 # print('Accuracy SVC: %.2f%%' % (100.0 * svm_model.score(X_test, y_test)))
-# print(classification_report(y_test, y_pred)[-162:])  #classification report// me da el porcentaje de cada WAPXXX
+# print(classification_report(y_test, y_pred)[-162:])  
 
+#---------------------------------------------------------------------------------------------------------------
+# #####BUSQUEDA DE DE LOS VALOREWS OPTIMOS del SVC  (tarda mucho mucho no se ha hecho alfinal)
+# param_grid = {'C':[1,10,100,1000],'gamma':[1,0.1,0.001,0.0001], 'kernel':['linear','rbf']}
+# grid = GridSearchCV(SVC(),param_grid,refit = True, verbose=2)
+# grid.fit(X_train,y_train)
+    
 #---------------------------------------------------------------------------------------------------------------
 
 # ####TODOS LOS CLASSIFIERS

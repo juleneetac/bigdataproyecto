@@ -9,6 +9,12 @@ from sklearn.cluster import AgglomerativeClustering
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 
+#Classifiers:
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+import seaborn as sns
+sns.set()
+
 
 print("")
 print("=====================================")
@@ -101,7 +107,7 @@ def kmeans(X, n_clusters):
     km = KMeans(n_clusters=n_clusters)
     km.fit(X)
     y_pred = km.predict(X)
-    plt.scatter(X[:,8], X[:,9],c=y_pred, cmap='rainbow')
+    plt.scatter(X[:,2], X[:9],c=y_pred, cmap='rainbow')
     plt.xlabel("house area")
     plt.ylabel("amount paid")
     plt.title("K-means")
