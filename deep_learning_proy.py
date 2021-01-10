@@ -24,7 +24,14 @@ dataproy = pd.read_csv(r"C:\Users\julen\Desktop\UNIVERSIDAD\4A\SCCBD (Smart Citi
 
 print(dataproy.info())
 
+#---------------------------------------------------------------------------------------------------------------
 
+###NOISE
+mu, sigma = 0, 0.1 
+# creating a noise 
+noise = np.random.normal(mu, sigma, [1000,1]) 
+print(noise)
+dataproy['noise'] = noise
 
 #---------------------------------------------------------------------------------------------------------------
 
@@ -56,7 +63,32 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 
 #---------------------------------------------------------------------------------------------------------------
 
-####DEEP LEARNING
+####DEEP LEARNING (con ruido)
+
+#script 7_1
+# 4a) Create the model
+model = Sequential()
+#model = keras.models.Sequential()
+model.add(Dense(20, input_dim=10, activation='relu'))  #las capas del medio mas grandes que el input
+model.add(Dense(20, activation='relu'))    #esto es una capa mas
+model.add(Dense(20, activation='relu'))     #esto es una capa mas
+model.add(Dense(10, activation='softmax'))
+
+# 4b) Compile model
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+# 4c) Fit the model
+model.fit(X, y, epochs=300, batch_size=15, verbose=1)
+
+# 4d) Evaluate the model
+score = model.evaluate(X, y, batch_size=15)
+print(score)
+score
+
+
+
+
+####DEEP LEARNING (sin ruido)
 
 #script 7_1
 # 4a) Create the model
@@ -80,49 +112,52 @@ score
 
 
 
-#script 7_2
-# 4a) Create the model
-model = Sequential()
-model.add(Dense(18, input_dim=9, activation='relu'))  #las capas del medio mas grandes que el input
-model.add(Dense(10, activation='softmax'))
+# #script 7_2
+# # 4a) Create the model
+# model = Sequential()
+# model.add(Dense(18, input_dim=9, activation='relu'))  #las capas del medio mas grandes que el input
+# model.add(Dense(10, activation='softmax'))
 
-print('1.......')
-model.compile(
-        loss = 'categorical_crossentropy',
-        optimizer = 'rmsprop', 
-        metrics = ['accuracy'])
-print('2.......')
-### FIT THE MODEL
-history = model.fit(X,y, epochs=50, batch_size=15, verbose=1)
+# print('1.......')
+# model.compile(
+#         loss = 'categorical_crossentropy',
+#         optimizer = 'rmsprop', 
+#         metrics = ['accuracy'])
+# print('2.......')
+# ### FIT THE MODEL
+# history = model.fit(X,y, epochs=50, batch_size=15, verbose=1)
 
-print('3.......')
-### PREDICT
-Y_pred = model.predict(
-        X, 
-        300*10 // 15+1)
+# print('3.......')
+# ### PREDICT
+# Y_pred = model.predict(
+#         X, 
+#         300*10 // 15+1)
 
-print('4.......')
-### EVALUATION
-y_pred = np.argmax(Y_pred, axis=1) 
-print('Matriz de confusión')
-#print(confusion_matrix(X.classes, y_pred))
+# print('4.......')
+# ### EVALUATION
+# y_pred = np.argmax(Y_pred, axis=1) 
+# print('Matriz de confusión')
+# #print(confusion_matrix(X.classes, y_pred))
 
-plt.figure(figsize=[8, 6])                                                      #perdidas
-plt.plot(history.history['loss'], 'r', linewidth=3.0) 
-plt.plot(history.history['val_loss'], 'b', linewidth=3.0)
-plt.legend(['Pérdidas de entrenamiento', 'Pérdidas de validación'], fontsize=24)
-plt.xlabel('Epocas ', fontsize=22)
-plt.ylabel('Pérdidas', fontsize=22)
-plt.ylim(0,7)
-plt.title('Curvas de pérdidas', fontsize=22) 
-plt.show()
+# plt.figure(figsize=[8, 6])                                                      #perdidas
+# plt.plot(history.history['loss'], 'r', linewidth=3.0) 
+# plt.plot(history.history['val_loss'], 'b', linewidth=3.0)
+# plt.legend(['Pérdidas de entrenamiento', 'Pérdidas de validación'], fontsize=24)
+# plt.xlabel('Epocas ', fontsize=22)
+# plt.ylabel('Pérdidas', fontsize=22)
+# plt.ylim(0,7)
+# plt.title('Curvas de pérdidas', fontsize=22) 
+# plt.show()
  
-plt.figure(figsize=[8, 6])                                                    #precision
-plt.plot(history.history['accuracy'], 'r', linewidth=3.0) 
-plt.plot(history.history['val_accuracy'], 'b', linewidth=3.0)
-plt.legend(['Precisión de entrenamiento', 'Precisión de validación'], fontsize=24)
-plt.xlabel('Epocas ', fontsize=22)
-plt.ylabel('Precisión', fontsize=22) 
-plt.ylim(0,1)
-plt.title('Curvas de precisión', fontsize=22)
-plt.show()
+# plt.figure(figsize=[8, 6])                                                    #precision
+# plt.plot(history.history['accuracy'], 'r', linewidth=3.0) 
+# plt.plot(history.history['val_accuracy'], 'b', linewidth=3.0)
+# plt.legend(['Precisión de entrenamiento', 'Precisión de validación'], fontsize=24)
+# plt.xlabel('Epocas ', fontsize=22)
+# plt.ylabel('Precisión', fontsize=22) 
+# plt.ylim(0,1)
+# plt.title('Curvas de precisión', fontsize=22)
+# plt.show()
+
+
+
