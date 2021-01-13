@@ -83,16 +83,19 @@ print(topsumafilas)
 
 def similar_zones(zone_id, matrix, k=3):
     # create a df of just the current user    //hemos cambiado el .index por ['ID'] para coger la ID de las zonas
-    zone = matrix[matrix['ID'] == zone_id]
+    #zone = matrix[matrix['ID'] == zone_id]
+    zone = matrix[matrix.index == zone_id]
     
     # and a df of all other users
-    other_zones = matrix[matrix['ID'] != zone_id]
+    #other_zones = matrix[matrix['ID'] != zone_id]
+    other_zones = matrix[matrix.index != zone_id]
     
     # calc cosine similarity between user and each other user
     similarities = cosine_similarity(zone,other_zones)[0].tolist()
     
     # create list of indices of these users
-    indices = other_zones['ID'].tolist()
+    #indices = other_zones['ID'].tolist()
+    indices = other_zones.index.tolist()
     
     # create key/values pairs of user index and their similarity
     index_similarity = dict(zip(indices, similarities))
@@ -103,14 +106,15 @@ def similar_zones(zone_id, matrix, k=3):
     
     # grab k users off the top
     top_zones_similarities = index_similarity_sorted[:k]
-    zones = [u[0] for u in top_zones_similarities]
-    
+    zones = [u for u in top_zones_similarities]  #la u devuelve el valor de la similitud
+        
     return zones
     
-current_zone = 12106    #ponemos el id de una zona concreta (ojo no el index)
+current_zone = 0    #ponemos el id de una zona concreta (ojo no el index)
 # try it out
 similar_zone_indices = similar_zones(current_zone, data2)
 print(similar_zone_indices)
+
 
 
 
